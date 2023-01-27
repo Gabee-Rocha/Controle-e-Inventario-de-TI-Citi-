@@ -1,19 +1,7 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "Efeitos2"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
 Option Explicit
 Public WithEvents cntLb1 As MSForms.Label
-Attribute cntLb1.VB_VarHelpID = -1
 Public WithEvents cntTx As MSForms.TextBox
-Attribute cntTx.VB_VarHelpID = -1
 Public WithEvents cntCb As MSForms.ComboBox
-Attribute cntCb.VB_VarHelpID = -1
 
 Private Sub cntLb1_MouseMove(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Single, ByVal Y As Single)
 
@@ -42,4 +30,3 @@ If Right(cntLb1.Name, 3) = "Bt2" Then
 End If
 
 End Sub
-

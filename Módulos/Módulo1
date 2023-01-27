@@ -1,4 +1,3 @@
-Attribute VB_Name = "Módulo1"
 Option Explicit
 
 Function TiraEfeitos()
@@ -42,5 +41,4 @@ With Relatorios
     .VoltarpagBt2.Visible = False
 End With
 End Function
-
 

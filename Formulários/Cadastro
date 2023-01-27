@@ -1,243 +1,3 @@
-VERSION 5.00
-Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} Cadastro 
-   Caption         =   "Citi - Cadastro e Inventário de TI"
-   ClientHeight    =   7410
-   ClientLeft      =   105
-   ClientTop       =   450
-   ClientWidth     =   14235
-   OleObjectBlob   =   "Cadastro.frx":0000
-   ShowModal       =   0   'False
-   StartUpPosition =   1  'CenterOwner
-End
-Attribute VB_Name = "Cadastro"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = False
-Option Explicit
-Dim CtLab1() As Efeitos
-Dim wPlan As Worksheet
-
-Dim nAtualizaForm As New Classe1
-Dim T
-Dim frmUserWidth As Double
-Dim frmUserWidthRatio As Double
-Dim frmUserHeight As Double
-Dim frmUserHeightRatio As Double
-Dim r As Integer
-Dim c As Integer
-Dim ctl As Control
-
-
-Private Sub BuscarBt2_Click()
-' Habilita e desabilita algumas labels e seta o foco na barra de pesquisa
-' ao clicar no botao buscar
-Me.SalvarMov.Visible = False
-Me.LabelLoja2.Visible = False
-Me.Loja2Cb.Visible = False
-
-Me.labelPesq.Visible = True
-Me.PesqTx.Enabled = True
-Me.PesqTx.Visible = True
-Me.PesqTx.SetFocus
-
-End Sub
-
-Private Sub CatCb_MouseMove(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Single, ByVal Y As Single)
-HookListBoxScroll Me, Me.CatCb
-End Sub
-
-
-Private Sub FecharBt2_Click()
-
-Call Fechar
-Application.Visible = True
-
-End Sub
-
-Private Sub Imprimir1Bt2_Click()
-
-'imprimir Termo Entrega
-
-    Application.Visible = True
-    Unload Me
-    Sheets("Termo_Entrega").Visible = True
-    Sheets("Termo_Entrega").Select
-    Range("A1:I49").Select
-    
-    Selection.PrintPreview
-    Sheets("Termo_Entrega").Visible = False
-    Cadastro.Show
-    
-    
-End Sub
-
-
-Private Sub Imprimir2Bt2_Click()
-
-'imprimir Termo Responsabilidade
-    Application.Visible = True
-    Unload Me
-    Sheets("Termo_Responsabilidade").Visible = True
-    Sheets("Termo_Responsabilidade").Select
-    Range("A1:H47").Select
-    
-    Selection.PrintPreview
-    Sheets("Termo_Responsabilidade").Visible = False
-    Cadastro.Show
-    
-End Sub
-
-Private Sub Imprimir3Bt2_Click()
-
-'imprimir Termo Devolução
-    Application.Visible = True
-    Unload Me
-    Sheets("Termo_Devolução").Visible = True
-    Sheets("Termo_Devolução").Select
-    Range("A1:I49").Select
-    
-    Selection.PrintPreview
-    Sheets("Termo_Devolução").Visible = False
-    Cadastro.Show
-
-End Sub
-
-Private Sub LabelExcluirRegBt2_Click()
-' Efetua a exclusao do dado na planilda de acordo com a seleção
-' do item no listbox
-Dim indc
-indc = Me.ListBox1.ListIndex + 2
-If MsgBox("Deseja excluir o item " & Me.CodIgo.Text & " ?", vbExclamation + vbYesNo, "Popular listbox e deletar item") = vbYes Then
-    Planilha1.Rows(indc).Delete
-MsgBox ("Item Deletado com sucesso!"), vbInformation, "Popular listbox e deletar item"
-End If
-
-Call movi_excluir
-
-ThisWorkbook.Save
-Unload Cadastro
-Cadastro.Show
-
-End Sub
-
-Private Sub LabelSalvarEdicaoBt2_Click()
-
-Call editar
-
-End Sub
-
-Private Sub LabelSNBt2_Click()
-' Verifica se os campos foram preenchidos
-If Me.CatCb.Text = "" Or Me.MMTx.Text = "" Or _
-    Me.LojaCb.Text = "" Or Me.SetorTx.Text = "" Or Me.UserTx.Text = "" Then
-        MsgBox "Preencha os campos obrigatórios", vbExclamation, "Campo vazio!"
-
-Exit Sub
-End If
-
-Call GravarNovo
-
-End Sub
-
-Private Sub LabelVoltar1Bt2_Click()
-
-Call carregar_ListBox
-Call LimpDados
-
-Me.LabelSNBt.Visible = False
-Me.LabelVoltar1Bt.Visible = False
-Me.LabelSalvarEdicaoBt.Visible = False
-Me.LabelExcluirRegBt.Visible = False
-Me.labelPesq.Visible = False
-Me.PesqTx.Visible = False
-Me.LabelConta.Visible = False
-
-Unload Cadastro
-Cadastro.Show
-
-End Sub
-
-
-' Ao clicar em um item passa os para as labels os valores dessa seleção
-Private Sub ListBox1_Click()
-
-On Error Resume Next
-
-With Me.ListBox1
-Me.CodIgo.Value = .List(.ListIndex, 0)
-Me.CatCb.Value = .List(.ListIndex, 1)
-Me.MMTx.Value = .List(.ListIndex, 2)
-Me.PatrTx.Value = .List(.ListIndex, 3)
-Me.SerieTx.Value = .List(.ListIndex, 4)
-Me.LojaCb.Value = .List(.ListIndex, 5)
-Me.SetorTx.Value = .List(.ListIndex, 6)
-Me.UserTx.Value = .List(.ListIndex, 8)
-
-Call Grava_Entrega
-Call Grava_Respons
-Call Grava_Devolu
-
-End With
-
-End Sub
-
-
-Private Sub Loja2Cb_MouseMove(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Single, ByVal Y As Single)
-HookListBoxScroll Me, Me.Loja2Cb
-End Sub
-
-Private Sub LojaCb_MouseMove(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Single, ByVal Y As Single)
-HookListBoxScroll Me, Me.LojaCb
-End Sub
-
-Private Sub MovimentarBt2_Click()
-Me.LabelLoja2.Visible = True
-Me.Loja2Cb.Visible = True
-Me.SalvarMov.Visible = True
-Me.labelPesq.Visible = False
-Me.PesqTx.Visible = False
-
-End Sub
-
-' Seta opatrimonio para receber apenas numeros e até 6 caracteres
-Private Sub PatrTx_KeyPress(ByVal KeyAscii As MSForms.ReturnInteger)
-
-Me.PatrTx.MaxLength = 6
-
-If KeyAscii < 48 Or KeyAscii > 57 Then
-    KeyAscii = 0
-End If
-
-End Sub
-
-' Desativa Label de pesquisa por Loja ao passar o curso por cima
-Private Sub PesqTx_KeyUp(ByVal KeyCode As MSForms.ReturnInteger, ByVal Shift As Integer)
-Me.labelPesq.Visible = False
-
-Call Pesquisar
-End Sub
-
-' Seta O CAMPO quantidade para receber apenas numeros e até 3 caracteres
-Private Sub QtdeTx_KeyPress(ByVal KeyAscii As MSForms.ReturnInteger)
-
-Me.QtdeTx.MaxLength = 3
-
-If KeyAscii < 48 Or KeyAscii > 57 Then
-    KeyAscii = 0
-End If
-
-End Sub
-
-Private Sub RelBt2_Click()
-Unload Cadastro
-Relatorios.Show
-End Sub
-
-Private Sub SalvarMov_Click()
-Call Mov_Loja
-End Sub
-
 Private Sub UserForm_Activate()
 Set nAtualizaForm.Form = Me
 End Sub
@@ -252,10 +12,10 @@ Cadastro.StartUpPosition = 2
 
 Dim hWnd As Long
 
-    'Vai para o topo do formulário
+    'Vai para o topo do formulÃ¡rio
     ScrollTop = 0
 
-    'Define os botões minimizar e maximizar do form
+    'Define os botÃµes minimizar e maximizar do form
     hWnd = FindWindow(vbNullString, Me.Caption)
     SetWindowLong hWnd, -16, &H20000 Or &H10000 Or &H84C80080
     
@@ -288,8 +48,8 @@ With Me.CatCb
     .AddItem "Tablet"
     .AddItem "Celular"
     .AddItem "Adaptadores"
-    .AddItem "Busca Preço"
-    .AddItem "Leitor de Mão"
+    .AddItem "Busca PreÃ§o"
+    .AddItem "Leitor de MÃ£o"
     .AddItem "Relogio Ponto"
     .AddItem "TV"
     .AddItem "Nobreak"
@@ -392,13 +152,13 @@ Me.LabelLoja2.Visible = False
 Me.Loja2Cb.Visible = False
 
 Me.PesqTx.Visible = False
-Me.labelPesq.Visible = False
+Me.LabelPesq.Visible = False
 
 Me.LabelConta.ForeColor = RGB(0, 191, 255)
 
 Call carregar_ListBox
-Call CriaCabecalhoLb(Me.ListBox1, Me.lbCabecalho, Array("Cód", "Categoria", "Marca e Modelo" _
-        , "Patrimônio", "Serie", "Loja", "Local", "Data", "Usuário"))
+Call CriaCabecalhoLb(Me.ListBox1, Me.lbCabecalho, Array("CÃ³d", "Categoria", "Marca e Modelo" _
+        , "PatrimÃ´nio", "Serie", "Loja", "Local", "Data", "UsuÃ¡rio"))
 End Sub
 
 ' Limpa os dados do controle
@@ -442,7 +202,7 @@ End If
 
 While lin < Linha
     If Cells(lin, 4) = Val(Me.PatrTx.Value) Then
-        MsgBox "Este Patrimônio já esta cadastrado!", vbCritical
+        MsgBox "Este PatrimÃ´nio jÃ¡ esta cadastrado!", vbCritical
         Exit Sub
     End If
     lin = lin + 1
@@ -515,7 +275,6 @@ lin = 2
     Me.ListBox1.ColumnHeads = False
     Me.ListBox1.ColumnWidths = "60;100;260;120;170;150;150;110;260"
     Me.ListBox1.ForeColor = RGB(0, 191, 255)
-
     While Planilha1.Range("A" & lin).Value <> Empty
         Me.ListBox1.AddItem
         Me.ListBox1.List(LinhaListBox, 0) = Planilha1.Range("A" & lin).Value
@@ -561,7 +320,7 @@ lin_movedi = Application.WorksheetFunction.CountA(mov_edi.Range("A:A"))
     resposta = MsgBox("Deseja realmente Alterar o item - " & valor & "?", vbYesNo)
 
     If resposta = vbNo Then
-        MsgBox "O item não foi alterado!", vbExclamation
+        MsgBox "O item nÃ£o foi alterado!", vbExclamation
         Exit Sub
 
     Else
@@ -640,7 +399,7 @@ Private Sub UserForm_MouseMove(ByVal Button As Integer, ByVal Shift As Integer, 
 TiraEfeitos
 End Sub
 
-' Grava os valores no termo de devolução
+' Grava os valores no termo de devoluÃ§Ã£o
 Sub Grava_Devolu()
 Dim wPlan As Worksheet
 
@@ -741,11 +500,11 @@ End Sub
 Public Sub CriaCabecalhoLb(lbPrincipal As MSForms.ListBox, lbCabecalho As MSForms.ListBox, cabecalho As Variant)
     
     With lbCabecalho
-        'Iguala o numeros de colunas do ListBox Cabeçalho ao do ListBox Principal
+        'Iguala o numeros de colunas do ListBox CabeÃ§alho ao do ListBox Principal
         .ColumnCount = lbPrincipal.ColumnCount
         .ColumnWidths = lbPrincipal.ColumnWidths
         
-        'Adiciona os elementos dos cabeçalhos
+        'Adiciona os elementos dos cabeÃ§alhos
         .Clear
         .AddItem
         Dim i As Integer
@@ -758,10 +517,10 @@ Public Sub CriaCabecalhoLb(lbPrincipal As MSForms.ListBox, lbCabecalho As MSForm
         .Font.Size = 12
         .Font.Bold = True
         .SpecialEffect = fmSpecialEffectFlat
-        .BackColor = RGB(35, 207, 222) 'RGB(229, 13, 90)
+        .BackColor = RGB(0, 191, 255) 'RGB(229, 13, 90)
         .Height = 12
         
-        'Alinha a posição e dimensões do ListBox Cabeçalho ao ListBox Principal
+        'Alinha a posiÃ§Ã£o e dimensÃµes do ListBox CabeÃ§alho ao ListBox Principal
         .Width = lbPrincipal.Width
         .Left = lbPrincipal.Left
         .Top = lbPrincipal.Top - (.Height - 1)

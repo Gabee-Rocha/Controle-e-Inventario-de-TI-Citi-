@@ -1,116 +1,8 @@
-VERSION 5.00
-Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} Relatorios 
-   Caption         =   "CTI - Relatorios"
-   ClientHeight    =   8220.001
-   ClientLeft      =   105
-   ClientTop       =   465
-   ClientWidth     =   17955
-   OleObjectBlob   =   "Relatorios.frx":0000
-   StartUpPosition =   1  'CenterOwner
-End
-Attribute VB_Name = "Relatorios"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = False
-Option Explicit
-Dim ctLabl() As Efeitos2
-Dim nAtualizaForm As New Classe1
-Dim T
-Dim frmUserWidth As Double
-Dim frmUserWidthRatio As Double
-Dim frmUserHeight As Double
-Dim frmUserHeightRatio As Double
-Dim r As Integer
-Dim c As Integer
-Dim ctl As Control
-
-Public Sub CriaCabecalhoLb(lbPrincipal As MSForms.ListBox, lbCabecalho As MSForms.ListBox, cabecalho As Variant)
-
-    With lbCabecalho
-        'Iguala o numeros de colunas do ListBox CabeÁalho ao do ListBox Principal
-        .ColumnCount = lbPrincipal.ColumnCount
-        .ColumnWidths = lbPrincipal.ColumnWidths
-        
-        'Adiciona os elementos dos cabeÁalhos
-        .Clear
-        .AddItem
-        Dim i As Integer
-        For i = 0 To UBound(cabecalho)
-            .List(0, i) = cabecalho(i)
-        Next i
-        
-        'Formata o visual
-        .ZOrder (0)
-        .Font.Size = 9
-        .Font.Bold = True
-        .SpecialEffect = fmSpecialEffectFlat
-        .BackColor = RGB(35, 207, 222) 'RGB(229, 13, 90)
-        .Height = 13
-        
-        'Alinha a posiÁ„o e dimensıes do ListBox CabeÁalho ao ListBox Principal
-        .Width = lbPrincipal.Width
-        .Left = lbPrincipal.Left
-        .Top = lbPrincipal.Top - (.Height - 1)
-    
-    End With
-    lbPrincipal.ZOrder (1)
-    
-End Sub
-
-Sub Design()
-
-    Dim ef As Object
-    Dim vcor1 As Variant
-    Dim vcor2 As Variant
-    
-    vcor1 = RGB(20, 0, 26)
-    vcor2 = RGB(0, 191, 255)
-    
-    Me.BackColor = vcor1
-    
-    For Each ef In Me.Controls
-    
-        If TypeName(ef) = "TextBox" Then
-            ef.BorderColor = vcor2
-        ElseIf TypeName(ef) = "ComboBox" Then
-            ef.BorderColor = vcor2
-        ElseIf TypeName(ef) = "ListBox" Then
-            ForeColor = vcor2
-            ef.BorderColor = vcor2
-            ef.BackColor = vcor1
-            
-        End If
-        
-    Next ef
-    Set ef = Nothing
-End Sub
-
-
-Private Sub BuscarBt2_Click()
-Me.PesquisaTx.Visible = True
-Me.labelPesq.Visible = True
-Me.PesquisaTx.Enabled = True
-Me.PesquisaTx.SetFocus
-End Sub
-
-
-Private Sub RelEntradaBt2_Click()
-Call Carregar_List_Entrada
-End Sub
-
-
-Private Sub PesquisaTx_KeyUp(ByVal KeyCode As MSForms.ReturnInteger, ByVal Shift As Integer)
-Me.labelPesq.Visible = False
-
-Call Pesquisar
-End Sub
-
 Private Sub UserForm_Activate()
 Set nAtualizaForm.Form = Me
 
-Call CriaCabecalhoLb(Me.ListBox1, Me.lbCabecalho, Array("CÛd", "Movimento", "Categoria" _
-        , "Marca e Modelo", "Loja", "PatrimÙnio", "Data", "Usu·rio", "Movido Para", "Feito Por"))
+Call CriaCabecalhoLb(Me.ListBox1, Me.lbCabecalho, Array("C√≥d", "Movimento", "Categoria" _
+        , "Marca e Modelo", "Loja", "Patrim√¥nio", "Data", "Usu√°rio", "Movido Para", "Feito Por"))
 End Sub
 
 
@@ -125,10 +17,10 @@ contador = Me.ListBox1.ListCount
 
 Dim hWnd As Long
 
-    'Vai para o topo do formul·rio
+    'Vai para o topo do formul√°rio
     ScrollTop = 0
 
-    'Define os botıes minimizar e maximizar do form
+    'Define os bot√µes minimizar e maximizar do form
     hWnd = FindWindow(vbNullString, Me.Caption)
     SetWindowLong hWnd, -16, &H20000 Or &H10000 Or &H84C80080
     
@@ -184,7 +76,7 @@ End Sub
 
 Sub Carregar_List_Entrada()
 
-' Carrega o List Box com os valores do rel·torio de MovimentaÁ„o
+' Carrega o List Box com os valores do rel√°torio de Movimenta√ß√£o
 Me.ListBox1.Enabled = True
 Dim LinhaListBox As Long
 Dim lin As Long
@@ -265,7 +157,7 @@ Unload Relatorios
 Cadastro.Show
 End Sub
 
-' A Proximas duas subs s„o para simular o Scrool do Mouse
+' A Proximas duas subs s√£o para simular o Scrool do Mouse
 Private Sub ListBox1_MouseMove(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Single, ByVal Y As Single)
 HookListBoxScroll Me, Me.ListBox1
 End Sub
@@ -273,4 +165,3 @@ End Sub
 Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
 UnhookListBoxScroll
 End Sub
-

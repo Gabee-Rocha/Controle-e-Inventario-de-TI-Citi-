@@ -1,4 +1,3 @@
-Attribute VB_Name = "MÛdulo3"
 Option Explicit
 
 Private Declare PtrSafe Function GetForegroundWindow Lib "user32" () As Long
@@ -61,7 +60,7 @@ Function LowLevelMouseProc _
 
             LowLevelMouseProc = True
 
-            'ATEN«√O: Troque o nome do seu Userform
+            'ATEN√á√ÉO: Troque o nome do seu Userform
             With Cadastro
 
                 'ROLAR PARA CIMA

@@ -1,4 +1,3 @@
-Attribute VB_Name = "Módulo2"
 Option Explicit
 
 #If Win64 Then
